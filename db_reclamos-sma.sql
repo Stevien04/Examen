@@ -112,8 +112,8 @@ CREATE TABLE IF NOT EXISTS `usuariosma` (
 
 -- Volcando datos para la tabla db_reclamossma.usuariosma: ~2 rows (aproximadamente)
 INSERT INTO `usuariosma` (`idUsuarioSMA`, `nombre`, `correo`, `password`, `idRolSMA`, `ip_autorizada`, `activo`) VALUES
-	(1, 'Administrador General', 'admin@upt.edu.pe', 'admin123', 1, '192.168.1.10', 1),
-	(2, 'Juan Pérez', 'juanperez@upt.edu.pe', '123456', 2, '192.168.1.20', 1);
+	(1, 'Administrador General', 'admin@upt.edu.pe', 'admin123', 1, ' 192.168.100.2', 1),
+	(2, 'Juan Pérez', 'juanperez@upt.edu.pe', '123456', 2, '192.168.100.2', 1);
 
 -- Volcando estructura para vista db_reclamossma.vista_resumensma
 -- Creando tabla temporal para superar errores de dependencia de VIEW
