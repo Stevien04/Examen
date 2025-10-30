@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         10.4.27-MariaDB - mariadb.org binary distribution
+-- Versión del servidor:         10.4.32-MariaDB - mariadb.org binary distribution
 -- SO del servidor:              Win64
--- HeidiSQL Versión:             12.4.0.6659
+-- HeidiSQL Versión:             12.11.0.7065
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -40,19 +40,20 @@ CREATE TABLE IF NOT EXISTS `reclamosma` (
   `idCategoriaSMA` int(11) NOT NULL,
   `descripcion` text NOT NULL,
   `fecha` date NOT NULL DEFAULT curdate(),
-  `estado` enum('Pendiente','En atención','Resuelto') DEFAULT 'Pendiente',
+  `estado` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`idReclamoSMA`),
   KEY `idUsuarioSMA` (`idUsuarioSMA`),
   KEY `idCategoriaSMA` (`idCategoriaSMA`),
   CONSTRAINT `reclamosma_ibfk_1` FOREIGN KEY (`idUsuarioSMA`) REFERENCES `usuariosma` (`idUsuarioSMA`),
   CONSTRAINT `reclamosma_ibfk_2` FOREIGN KEY (`idCategoriaSMA`) REFERENCES `categoriasma` (`idCategoriaSMA`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcando datos para la tabla db_reclamossma.reclamosma: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla db_reclamossma.reclamosma: ~4 rows (aproximadamente)
 INSERT INTO `reclamosma` (`idReclamoSMA`, `idUsuarioSMA`, `idCategoriaSMA`, `descripcion`, `fecha`, `estado`) VALUES
-	(1, 2, 1, 'El proyector del laboratorio no enciende.', '2025-10-29', 'Pendiente'),
-	(2, 2, 2, 'No hay agua en los baños del pabellón A.', '2025-10-29', 'En atención'),
-	(3, 2, 3, 'Error en la nota del curso de Programación.', '2025-10-29', 'Resuelto');
+	(1, 2, 1, 'El proyector del laboratorio no enciende.', '2025-10-29', 'Resuelto'),
+	(2, 2, 2, 'No hay agua en los baños del pabellón A.', '2025-10-29', 'Resuelto'),
+	(3, 2, 3, 'Error en la nota del curso de Programación.', '2025-10-29', 'Resuelto'),
+	(4, 2, 3, 'AADSADASD', '2025-10-29', 'Pendiente');
 
 -- Volcando estructura para tabla db_reclamossma.rolsma
 CREATE TABLE IF NOT EXISTS `rolsma` (
@@ -79,13 +80,20 @@ CREATE TABLE IF NOT EXISTS `seguimientosma` (
   KEY `idAdminSMA` (`idAdminSMA`),
   CONSTRAINT `seguimientosma_ibfk_1` FOREIGN KEY (`idReclamoSMA`) REFERENCES `reclamosma` (`idReclamoSMA`),
   CONSTRAINT `seguimientosma_ibfk_2` FOREIGN KEY (`idAdminSMA`) REFERENCES `usuariosma` (`idUsuarioSMA`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Volcando datos para la tabla db_reclamossma.seguimientosma: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla db_reclamossma.seguimientosma: ~10 rows (aproximadamente)
 INSERT INTO `seguimientosma` (`idSeguimientoSMA`, `idReclamoSMA`, `idAdminSMA`, `fecha`, `observacion`, `estado`) VALUES
 	(1, 1, 1, '2025-10-29 18:46:57', 'Se revisó el proyector, se solicitará mantenimiento.', 'En atención'),
 	(2, 2, 1, '2025-10-29 18:46:57', 'El área de servicios está interviniendo.', 'En atención'),
-	(3, 3, 1, '2025-10-29 18:46:57', 'Error corregido en el sistema académico.', 'Resuelto');
+	(3, 3, 1, '2025-10-29 18:46:57', 'Error corregido en el sistema académico.', 'Resuelto'),
+	(4, 1, 1, '2025-10-30 02:35:35', 'AD', 'Pendiente'),
+	(5, 1, 1, '2025-10-30 02:35:38', 'ADAD', 'Resuelto'),
+	(6, 2, 1, '2025-10-30 02:38:35', 'ADADA', 'Pendiente'),
+	(7, 2, 1, '2025-10-30 02:41:15', 'adad', 'En atención'),
+	(8, 2, 1, '2025-10-30 02:41:19', 'adadadad', 'Resuelto'),
+	(9, 3, 1, '2025-10-30 02:41:21', 'asdadada', 'Pendiente'),
+	(10, 3, 1, '2025-10-30 02:41:41', 'asdadad', 'Resuelto');
 
 -- Volcando estructura para tabla db_reclamossma.usuariosma
 CREATE TABLE IF NOT EXISTS `usuariosma` (
@@ -110,12 +118,11 @@ INSERT INTO `usuariosma` (`idUsuarioSMA`, `nombre`, `correo`, `password`, `idRol
 -- Volcando estructura para vista db_reclamossma.vista_resumensma
 -- Creando tabla temporal para superar errores de dependencia de VIEW
 CREATE TABLE `vista_resumensma` (
-	`categoria` VARCHAR(100) NOT NULL COLLATE 'latin1_swedish_ci',
-	`estado` ENUM('Pendiente','En atención','Resuelto') NULL COLLATE 'latin1_swedish_ci',
+	`categoria` VARCHAR(1) NOT NULL COLLATE 'latin1_swedish_ci',
+	`estado` VARCHAR(1) NULL COLLATE 'latin1_swedish_ci',
 	`total` BIGINT(21) NOT NULL
-) ENGINE=MyISAM;
+);
 
--- Volcando estructura para vista db_reclamossma.vista_resumensma
 -- Eliminando tabla temporal y crear estructura final de VIEW
 DROP TABLE IF EXISTS `vista_resumensma`;
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_resumensma` AS SELECT c.nombreCategoria AS categoria, 
@@ -123,7 +130,8 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vista_resumensma` AS SELEC
        COUNT(r.idReclamoSMA) AS total
 FROM reclamoSMA r
 INNER JOIN categoriaSMA c ON r.idCategoriaSMA = c.idCategoriaSMA
-GROUP BY c.nombreCategoria, r.estado ;
+GROUP BY c.nombreCategoria, r.estado 
+;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
