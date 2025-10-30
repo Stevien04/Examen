@@ -3,13 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/SMARCA_Uni02/web/index.html</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/SMARCA_Uni02/src/java/ConfigSMA/ClsConexionSMA.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/SMARCA_Uni02/web/VistaSMA/LoginSMA.jsp</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/SMARCA_Uni02/src/java/ControladorSMA/ControladorLoginSMA.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/SMARCA_Uni02/src/java/InterfacesSMA/CRUDLoginSMA.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/SMARCA_Uni02/src/java/ModeloSMA/ClsUsuarioSMA.java</file>
-            <file>file:/C:/Users/HP/Documents/NetBeansProjects/SMARCA_Uni02/src/java/ModeloDAOSMA/ClsLoginSMA.java</file>
+            <file>file:/D:/Nueva%20carpeta/EXAMEN%20II/EXAMEN%20II/SMARCA_Uni02/src/java/ConfigSMA/ClsConexionSMA.java</file>
+            <file>file:/D:/Nueva%20carpeta/EXAMEN%20II/EXAMEN%20II/SMARCA_Uni02/web/VistaSMA/AdminSMA/GestionReclamosSMA.jsp</file>
+            <file>file:/D:/Nueva%20carpeta/EXAMEN%20II/EXAMEN%20II/SMARCA_Uni02/web/VistaSMA/AdminSMA/ReporteResumenSMA.jsp</file>
+            <file>file:/D:/Nueva%20carpeta/EXAMEN%20II/EXAMEN%20II/SMARCA_Uni02/src/java/ControladorSMA/ControladorLoginSMA.java</file>
+            <file>file:/D:/Nueva%20carpeta/EXAMEN%20II/EXAMEN%20II/SMARCA_Uni02/src/java/ModeloDAOSMA/ClsLoginSMA.java</file>
+            <file>file:/D:/Nueva%20carpeta/EXAMEN%20II/EXAMEN%20II/SMARCA_Uni02/src/java/ModeloSMA/ClsUsuarioSMA.java</file>
+            <file>file:/D:/Nueva%20carpeta/EXAMEN%20II/EXAMEN%20II/SMARCA_Uni02/src/java/ControladorSMA/ControladorReclamoSMA.java</file>
         </group>
     </open-files>
 </project-private>
