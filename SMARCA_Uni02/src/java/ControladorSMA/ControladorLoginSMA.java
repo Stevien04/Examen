@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @WebServlet(name = "ControladorLoginSMA", urlPatterns = {"/ControladorLoginSMA"})
 public class ControladorLoginSMA extends HttpServlet {
@@ -76,10 +79,11 @@ public class ControladorLoginSMA extends HttpServlet {
             return;
         }
 
-        String ipRemota = obtenerIPCliente(request);
+       String ipRemota = obtenerIPv4Cliente(request);
         if (usuario.getIpAutorizada() != null && !usuario.getIpAutorizada().isBlank()) {
-            if (!usuario.getIpAutorizada().equals(ipRemota) && !"127.0.0.1".equals(ipRemota) && !"0:0:0:0:0:0:0:1".equals(ipRemota)) {
-                prepararError("Acceso denegado desde la IP " + ipRemota + ".", request, response);
+            if (ipRemota == null || !usuario.getIpAutorizada().equals(ipRemota)) {
+                String ipMostrada = ipRemota != null ? ipRemota : "desconocida";
+                prepararError("Acceso denegado desde la IP " + ipMostrada + ".", request, response);
                 return;
             }
         }
@@ -115,11 +119,49 @@ public class ControladorLoginSMA extends HttpServlet {
         return builder.toString();
     }
 
-    private String obtenerIPCliente(HttpServletRequest request) {
+   private String obtenerIPv4Cliente(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
         if (ip != null && !ip.isBlank()) {
-            return ip.split(",")[0].trim();
+            for (String candidato : ip.split(",")) {
+                String ipv4 = normalizarIPv4(candidato.trim());
+                if (ipv4 != null) {
+                    return ipv4;
+                }
+            }
         }
-        return request.getRemoteAddr();
+        return normalizarIPv4(request.getRemoteAddr());
+    }
+
+    private String normalizarIPv4(String ip) {
+        if (ip == null || ip.isBlank()) {
+            return null;
+        }
+        try {
+            InetAddress direccion = InetAddress.getByName(ip);
+            if (direccion instanceof Inet4Address) {
+                return direccion.getHostAddress();
+            }
+
+            byte[] bytes = direccion.getAddress();
+            if (bytes.length == 16) {
+                boolean mapeada = true;
+                for (int i = 0; i < 10; i++) {
+                    if (bytes[i] != 0) {
+                        mapeada = false;
+                        break;
+                    }
+                }
+                if (mapeada && bytes[10] == (byte) 0xff && bytes[11] == (byte) 0xff) {
+                    return String.format("%d.%d.%d.%d",
+                            bytes[12] & 0xff,
+                            bytes[13] & 0xff,
+                            bytes[14] & 0xff,
+                            bytes[15] & 0xff);
+                }
+            }
+        } catch (UnknownHostException ex) {
+            return null;
+        }
+       return null;
     }
 }
